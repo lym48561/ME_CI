@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Working Hour Management</title>
+
+    <!-- Apply saved theme before page renders -->
+    <script>
+      try {
+        const savedTheme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+
+        if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+          document.documentElement.classList.add("dark");
+        }
+      } catch (error) {
+        console.warn("Could not load saved theme:", error);
+      }
+    </script>
+
+    <!-- Main JavaScript -->
+    <script type="module" src="/src/main.js"></script>
+  </head>
+
+  <body
+    class="min-h-screen bg-slate-50 text-slate-800 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100"
+  >
+    <!-- ================================= -->
+    <!-- SHARED SITE HEADER -->
+    <!-- ================================= -->
+
+    <div id="site-header"></div>
+
+    <main class="max-w-6xl mx-auto px-6 py-10">
+      <!-- ================================= -->
+      <!-- PAGE HEADER -->
+      <!-- ================================= -->
+
+      <header class="mb-8">
+        <h1
+          class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white"
+        >
+          Working Hour Management
+        </h1>
+      </header>
+
+      <!-- ================================= -->
+      <!-- WORKING DATE -->
+      <!-- ================================= -->
+
+      <section
+        class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm dark:bg-slate-900 dark:border-slate-800"
+      >
+        <label
+          for="workingDate"
+          class="block font-semibold text-slate-700 mb-3 dark:text-slate-200"
+        >
+          Working Date
+        </label>
+
+        <input
+          type="text"
+          id="workingDate"
+          placeholder="DD/MM/YYYY"
+          maxlength="10"
+          autocomplete="off"
+          class="w-full border border-slate-300 bg-white text-slate-800 placeholder:text-slate-400 rounded-lg p-4 text-lg font-semibold outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
+        />
+
+        <p class="text-xs text-slate-500 mt-2 dark:text-slate-400">
+          Enter date as DD/MM/YYYY (Example: 13/11/2026)
+        </p>
+      </section>
+
+      <!-- ================================= -->
+      <!-- WORKING HOUR DATE RESULTS -->
+      <!-- ================================= -->
+
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
+        <!-- DIRECT TO INDIRECT -->
+
+        <div
+          class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm dark:bg-slate-900 dark:border-slate-800"
+        >
+          <h2 class="font-bold text-lg text-green-600 dark:text-green-400 mb-4">
+            Direct → Indirect
+          </h2>
+
+          <p class="text-sm text-slate-500 mb-2 dark:text-slate-400">
+            Current Month
+          </p>
+
+          <p
+            id="currentMonth"
+            class="text-xl font-bold text-slate-800 dark:text-white"
+          >
+            -
+          </p>
+
+          <p class="text-sm text-slate-500 mt-4 dark:text-slate-400">
+            Action: Change all current-month direct workers to Indirect.
+          </p>
+        </div>
+
+        <!-- DIRECT WH ZERO -->
+
+        <div
+          class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm dark:bg-slate-900 dark:border-slate-800"
+        >
+          <h2 class="font-bold text-lg text-blue-600 dark:text-blue-400 mb-4">
+            Direct W.H. = 0
+          </h2>
+
+          <p class="text-sm text-slate-500 mb-2 dark:text-slate-400">
+            Previous Month
+          </p>
+
+          <p
+            id="zeroPeriod"
+            class="text-xl font-bold text-slate-800 dark:text-white"
+          >
+            -
+          </p>
+
+          <p class="text-sm text-slate-500 mt-4 dark:text-slate-400">
+            Action: Set direct workers W.H. to 0.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================= -->
+      <!-- LINE CHECKER -->
+      <!-- ================================= -->
+
+      <section
+        class="mt-8 bg-white border border-slate-200 rounded-xl p-6 shadow-sm dark:bg-slate-900 dark:border-slate-800"
+      >
+        <!-- SECTION HEADER -->
+
+        <div class="mb-6">
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">
+            Output Line Checker
+          </h2>
+
+          <p class="text-sm text-slate-500 mt-2 dark:text-slate-400">
+            Check missing Assembly and Stitching lines.
+          </p>
+        </div>
+
+        <!-- ================================= -->
+        <!-- ASSEMBLY & STITCHING INPUT -->
+        <!-- ================================= -->
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+          <!-- ASSEMBLY INPUT -->
+
+          <div>
+            <label
+              for="assemblyList"
+              class="block font-semibold text-slate-700 mb-3 dark:text-slate-200"
+            >
+              Assembly Line List
+            </label>
+
+            <textarea
+              id="assemblyList"
+              rows="8"
+              placeholder="Paste Assembly line names from Excel here..."
+              class="w-full border border-slate-300 bg-white text-slate-800 placeholder:text-slate-400 rounded-lg p-4 text-sm font-mono outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition resize-y dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
+            ></textarea>
+
+            <p class="text-xs text-slate-500 mt-2 dark:text-slate-400">
+              Copy the Assembly line column from Excel and paste it here.
+            </p>
+          </div>
+
+          <!-- STITCHING INPUT -->
+
+          <div>
+            <label
+              for="stitchingList"
+              class="block font-semibold text-slate-700 mb-3 dark:text-slate-200"
+            >
+              Stitching Line List
+            </label>
+
+            <textarea
+              id="stitchingList"
+              rows="8"
+              placeholder="Paste Stitching line names from Excel here..."
+              class="w-full border border-slate-300 bg-white text-slate-800 placeholder:text-slate-400 rounded-lg p-4 text-sm font-mono outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition resize-y dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
+            ></textarea>
+
+            <p class="text-xs text-slate-500 mt-2 dark:text-slate-400">
+              Copy the Stitching line column from Excel and paste it here.
+            </p>
+          </div>
+        </div>
+
+        <!-- CHECK BUTTON -->
+
+        <button
+          type="button"
+          id="checkAssembly"
+          class="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold px-6 py-3 rounded-lg transition shadow-sm"
+        >
+          Check All Lines
+        </button>
+
+        <!-- ERROR MESSAGE -->
+
+        <p
+          id="assemblyError"
+          class="hidden text-red-600 dark:text-red-400 text-sm mt-3"
+        >
+          Please paste at least one line list first.
+        </p>
+
+        <!-- ================================= -->
+        <!-- ASSEMBLY RESULTS -->
+        <!-- ================================= -->
+
+        <div id="assemblyResults" class="hidden mt-8">
+          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-5">
+            Assembly Checking Results
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <!-- B3 -->
+
+            <div
+              class="border border-slate-200 rounded-xl p-5 bg-white shadow-sm dark:bg-slate-950 dark:border-slate-800"
+            >
+              <h4 class="font-bold text-lg text-slate-800 dark:text-white mb-3">
+                B3 Floor
+              </h4>
+
+              <p id="b3Status" class="text-sm font-semibold mb-3">-</p>
+
+              <p class="text-sm text-slate-500 mb-2 dark:text-slate-400">
+                Missing Lines:
+              </p>
+
+              <div
+                id="b3Missing"
+                class="text-sm text-slate-700 dark:text-slate-300 break-words space-y-1"
+              >
+                -
+              </div>
+
+              <div
+                id="b3WH"
+                class="hidden mt-4 p-3 bg-red-50 border border-red-100 rounded-lg dark:bg-red-950/40 dark:border-red-900"
+              >
+                <p class="font-bold text-red-600 dark:text-red-400 mb-3">
+                  Required W.H. = 0.1
+                </p>
+
+                <div id="b3WHList" class="space-y-2 text-sm"></div>
+              </div>
+            </div>
+
+            <!-- B4 -->
+
+            <div
+              class="border border-slate-200 rounded-xl p-5 bg-white shadow-sm dark:bg-slate-950 dark:border-slate-800"
+            >
+              <h4 class="font-bold text-lg text-slate-800 dark:text-white mb-3">
+                B4 Floor
+              </h4>
+
+              <p id="b4Status" class="text-sm font-semibold mb-3">-</p>
+
+              <p class="text-sm text-slate-500 mb-2 dark:text-slate-400">
+                Missing Lines:
+              </p>
+
+              <div
+                id="b4Missing"
+                class="text-sm text-slate-700 dark:text-slate-300 break-words space-y-1"
+              >
+                -
+              </div>
+
+              <div
+                id="b4WH"
+                class="hidden mt-4 p-3 bg-red-50 border border-red-100 rounded-lg dark:bg-red-950/40 dark:border-red-900"
+              >
+                <p class="font-bold text-red-600 dark:text-red-400 mb-3">
+                  Required W.H. = 0.1
+                </p>
+
+                <div id="b4WHList" class="space-y-2 text-sm"></div>
+              </div>
+            </div>
+
+            <!-- A4 -->
+
+            <div
+              class="border border-slate-200 rounded-xl p-5 bg-white shadow-sm dark:bg-slate-950 dark:border-slate-800"
+            >
+              <h4 class="font-bold text-lg text-slate-800 dark:text-white mb-3">
+                A4 Floor
+              </h4>
+
+              <p id="a4Status" class="text-sm font-semibold mb-3">-</p>
+
+              <p class="text-sm text-slate-500 mb-2 dark:text-slate-400">
+                Missing Lines:
+              </p>
+
+              <div
+                id="a4Missing"
+                class="text-sm text-slate-700 dark:text-slate-300 break-words space-y-1"
+              >
+                -
+              </div>
+
+              <div
+                id="a4WH"
+                class="hidden mt-4 p-3 bg-red-50 border border-red-100 rounded-lg dark:bg-red-950/40 dark:border-red-900"
+              >
+                <p class="font-bold text-red-600 dark:text-red-400 mb-3">
+                  Required W.H. = 0.1
+                </p>
+
+                <div id="a4WHList" class="space-y-2 text-sm"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================= -->
+        <!-- STITCHING RESULTS -->
+        <!-- ================================= -->
+
+        <div id="stitchingResults" class="hidden mt-8">
+          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-5">
+            Stitching Checking Results
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <!-- B3 -->
+
+            <div
+              class="border border-slate-200 rounded-xl p-5 bg-white shadow-sm dark:bg-slate-950 dark:border-slate-800"
+            >
+              <h4 class="font-bold text-lg text-slate-800 dark:text-white mb-3">
+                B3 Floor
+              </h4>
+
+              <p id="stB3Status" class="text-sm font-semibold mb-3">-</p>
+
+              <p class="text-sm text-slate-500 mb-2 dark:text-slate-400">
+                Missing Lines:
+              </p>
+
+              <div
+                id="stB3Missing"
+                class="text-sm text-slate-700 dark:text-slate-300 break-words space-y-1"
+              >
+                -
+              </div>
+            </div>
+
+            <!-- B4 -->
+
+            <div
+              class="border border-slate-200 rounded-xl p-5 bg-white shadow-sm dark:bg-slate-950 dark:border-slate-800"
+            >
+              <h4 class="font-bold text-lg text-slate-800 dark:text-white mb-3">
+                B4 Floor
+              </h4>
+
+              <p id="stB4Status" class="text-sm font-semibold mb-3">-</p>
+
+              <p class="text-sm text-slate-500 mb-2 dark:text-slate-400">
+                Missing Lines:
+              </p>
+
+              <div
+                id="stB4Missing"
+                class="text-sm text-slate-700 dark:text-slate-300 break-words space-y-1"
+              >
+                -
+              </div>
+            </div>
+
+            <!-- A4 -->
+
+            <div
+              class="border border-slate-200 rounded-xl p-5 bg-white shadow-sm dark:bg-slate-950 dark:border-slate-800"
+            >
+              <h4 class="font-bold text-lg text-slate-800 dark:text-white mb-3">
+                A4 Floor
+              </h4>
+
+              <p id="stA4Status" class="text-sm font-semibold mb-3">-</p>
+
+              <p class="text-sm text-slate-500 mb-2 dark:text-slate-400">
+                Missing Lines:
+              </p>
+
+              <div
+                id="stA4Missing"
+                class="text-sm text-slate-700 dark:text-slate-300 break-words space-y-1"
+              >
+                -
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ================================= -->
+    <!-- WORKING HOUR JAVASCRIPT -->
+    <!-- ================================= -->
+
+    <script type="module" src="/src/js/working_hour.js"></script>
+  </body>
+</html>

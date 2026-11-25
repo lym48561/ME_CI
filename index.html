@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>CI Helper</title>
+
+    <script>
+      // Apply saved theme before page renders
+      const savedTheme = localStorage.getItem("theme");
+      const systemDark = window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      ).matches;
+
+      if (savedTheme === "dark" || (!savedTheme && systemDark)) {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
+
+    <script type="module" src="/src/main.js"></script>
+  </head>
+
+  <body
+    class="min-h-screen bg-slate-50 text-slate-800 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100"
+  >
+    <!-- Header -->
+    <div id="site-header"></div>
+
+    <!-- Main -->
+    <main class="max-w-7xl mx-auto px-6 py-12">
+      <!-- Welcome -->
+      <section class="mb-12 welcome-animation">
+        <h1
+          class="text-4xl font-bold tracking-tight text-slate-900 dark:text-white"
+        >
+          CI Helper
+        </h1>
+
+        <p class="text-slate-500 mt-3 dark:text-slate-400">
+          Simple tools to make your work easier.
+        </p>
+      </section>
+
+      <!-- Tools -->
+      <section>
+        <h2
+          class="text-lg font-semibold text-slate-800 mb-5 dark:text-slate-100"
+        >
+          My Tools
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Working Hours -->
+          <a
+            href="/src/pages/working_hour.html"
+            class="module-card group bg-white border border-slate-200 rounded-xl p-6 hover:border-blue-300 transition dark:bg-slate-900 dark:border-slate-800 dark:hover:border-blue-500"
+          >
+            <!-- Icon -->
+            <div
+              class="module-icon w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mb-5 dark:bg-blue-500/10 dark:text-blue-400"
+            >
+              <i data-lucide="clock" class="w-5 h-5"></i>
+            </div>
+
+            <h3 class="font-semibold text-slate-800 mb-2 dark:text-slate-100">
+              Working Hours
+            </h3>
+
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+              Calculate and manage working hour data.
+            </p>
+
+            <div
+              class="mt-6 flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-400"
+            >
+              Open Tool
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </div>
+          </a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
